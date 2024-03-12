@@ -22,7 +22,7 @@ public class OrderController {
     public ResponseEntity<Object> registerNewOrder(@RequestBody OrderDto orderDto){
         Optional<Person> personName = orderService.findByCompleteName(orderDto.searchPersonByName());
         if(personName.isPresent()){
-            Person person = personName.get();       //ISSO NÃO ESTÁ FUNCIONAL
+            Person person = personName.get();
             Order order = Order.builder().title(orderDto.title())
                     .description(orderDto.description())
                     .person(person).build();

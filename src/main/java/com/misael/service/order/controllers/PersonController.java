@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -21,8 +22,14 @@ public class PersonController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Object> registerNewPerson(@RequestBody @Valid PersonDto dto){
-        var person = Person.builder().build();
-        BeanUtils.copyProperties(dto,person);
+        var person = Person.builder()
+                .completeName(dto.completeName())
+                .cpf(dto.cpf())
+                .cnpj(dto.cnpj())
+                .cellphone(dto.cellphone())
+                .email(dto.email())
+                .personCreatedDate(LocalDateTime.now())
+                .build();
         return ResponseEntity.ok().body(personService.registerNewPerson(person));
     }
 
@@ -30,5 +37,16 @@ public class PersonController {
     public ResponseEntity<Object> listAllPersons(){
         return ResponseEntity.status(HttpStatus.FOUND).body(personService.listAllPersons());
     }
+
+    @RequestMapping(value = "/{completeName}",method = RequestMethod.GET)
+    public ResponseEntity<Object> findPersonByCompleteName(@RequestParam(value = "completeName")
+                                                               @Valid String completeName){
+        Optional<Person> findCompleteName = personService.findByCompleteName(completeName);
+        if(findCompleteName.isPresent()){
+            return ResponseEntity.ok().body(personService.findByCompleteName(completeName));
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Person not found");
+    }
+
 
 }

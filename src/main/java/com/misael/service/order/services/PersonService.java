@@ -23,10 +23,6 @@ public class PersonService {
         return personRepository.save(person);
 
     }
-    public Optional<Person> findById(Integer id){
-        return personRepository.findById(id);
-    }
-
     public List<Person> listAllPersons(){
         return personRepository.findAll();
     }

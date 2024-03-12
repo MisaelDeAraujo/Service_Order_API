@@ -20,7 +20,7 @@ public class GlobalExceptionHandler{
 
     @ExceptionHandler(PersonNotFoundException.class)
     public ResponseEntity<String> personNotFoundHandler(){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PERSON NOT FOUND");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("errors: Person not found");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

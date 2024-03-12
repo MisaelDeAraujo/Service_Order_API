@@ -11,5 +11,7 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
 
     Optional<Person> findByCompleteName(String completeName);
 
+    Optional<Person> findByCnpj(String cnpj);
+
 
 }

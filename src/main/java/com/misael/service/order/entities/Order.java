@@ -6,9 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
@@ -22,14 +21,13 @@ public class Order {
     private Integer id;
     @Column(length = 50)
     private String title;
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
     @ManyToOne
     @JoinColumn(name = "person_id")
     private Person person;
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date orderCreatedDate;
+    @JsonFormat(pattern = "dd/MM/yyyy hh:MM:ss")
+    private LocalDateTime orderCreatedDate;
 
 
 }

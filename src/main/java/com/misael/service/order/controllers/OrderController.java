@@ -1,39 +1,36 @@
 package com.misael.service.order.controllers;
 
-import com.misael.service.order.entities.Order;
-import com.misael.service.order.entities.Person;
-import com.misael.service.order.entities.dtos.OrderDto;
+import com.misael.service.order.entities.dtos.AlterServiceOrderDto;
+import com.misael.service.order.entities.dtos.SearchPersonAndRegisterOrderDto;
 import com.misael.service.order.services.OrderService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
 
-    private OrderService orderService;
+    @Autowired
+    private final OrderService orderService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Object> registerNewOrder(@RequestBody OrderDto orderDto){
-        Optional<Person> personName = orderService.findByCompleteName(orderDto.searchPersonByName());
-        if(personName.isPresent()){
-            Person person = personName.get();       //ISSO NÃO ESTÁ FUNCIONAL
-            Order order = Order.builder().title(orderDto.title())
-                    .description(orderDto.description())
-                    .person(person).build();
-            return ResponseEntity.status(HttpStatus.OK).body(orderService.registerNewOrder(order));
+    public ResponseEntity<Object> registerNewOrder(@RequestBody @Valid SearchPersonAndRegisterOrderDto searchPersonAndRegisterOrderDto){
+            return ResponseEntity.accepted().body(orderService.registerNewOrder(searchPersonAndRegisterOrderDto));
         }
-
-        return ResponseEntity.internalServerError().body("PERSON NOT FOUND");
-    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Object> listAllServiceOrders(){
-        return ResponseEntity.ok().body(orderService.listAllServiceOrders());
+        return ResponseEntity.accepted().body(orderService.listAllServiceOrders());
+    }
+
+    @RequestMapping(value = "/{id}",method = RequestMethod.PUT)
+    public ResponseEntity<Object> alterExistingOrderById(@RequestBody @Valid AlterServiceOrderDto orderDto,
+                                                        @PathVariable(value = "id") Integer id){
+        return ResponseEntity.accepted().body(orderService.alterExistingOrder(orderDto,id));
     }
 }

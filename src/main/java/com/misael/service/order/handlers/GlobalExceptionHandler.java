@@ -8,7 +8,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +18,12 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler{
 
     @ExceptionHandler(PersonNotFoundException.class)
-    public ResponseEntity<String> personNotFoundHandler(){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PERSON NOT FOUND");
+    public ResponseEntity<Object> personNotFoundHandler(){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("errors Pessoa não encontrada");
+    }
+
+    public ResponseEntity<Object> serviceOrderNotFound(){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("errors Ordem de Serviço não encontrado");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

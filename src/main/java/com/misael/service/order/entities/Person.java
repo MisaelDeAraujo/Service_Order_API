@@ -6,9 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Builder
 @NoArgsConstructor
@@ -35,9 +34,8 @@ public class Person {
 
     @Column(length = 50, unique = true)
     private String email;
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date personCreatedDate;
+    @JsonFormat(pattern = "dd/MM/yyyy hh:MM:ss")
+    private LocalDateTime personCreatedDate;
 
 
 

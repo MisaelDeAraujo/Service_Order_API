@@ -1,0 +1,3 @@
+ALTER TABLE order_tb
+ALTER COLUMN description
+SET DATA TYPE TEXT;

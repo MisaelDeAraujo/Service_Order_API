@@ -5,21 +5,16 @@ import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
-import org.springframework.lang.Nullable;
 
-public record PersonDto(
-        @NotBlank(message = "Nome Completo inválido")
+public record PhysicalPersonDto(
+        @NotBlank(message = "completeName inválido")
         String completeName,
-
-        @Nullable
+        @NotBlank
         @CPF
         String cpf,
-        @Nullable
-        @CNPJ
-        String cnpj,
-        @NotBlank(message = "Telefone não pode ser vazio")
-        @Length(max = 11, min = 11,message = "Telefone inválido")
+        @NotBlank(message = "cellphone não pode ser vazio")
+        @Length(max = 11, min = 9,message = "cellphone inválido")
         String cellphone,
-        @Email(message = "EMAIL inválido")
+        @Email(message = "email inválido")
         String email) {
 }

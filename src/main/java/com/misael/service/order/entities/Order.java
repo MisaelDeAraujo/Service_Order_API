@@ -21,7 +21,7 @@ public class Order {
     private Integer id;
     @Column(length = 50)
     private String title;
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
     @ManyToOne
     @JoinColumn(name = "person_id")

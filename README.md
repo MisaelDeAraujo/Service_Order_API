@@ -1,4 +1,4 @@
-## Em contrução 🚧...
+## Em contrução, porém já funcional 🚧
  
 ### Tecnologias:
 

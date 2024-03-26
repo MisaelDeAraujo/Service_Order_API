@@ -1,9 +1,13 @@
 package com.misael.service.order.handlers;
 
+import com.misael.service.order.entities.Person;
 import com.misael.service.order.exceptions.PersonNotFoundException;
+import com.misael.service.order.exceptions.ServiceOrderNotFoundException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,25 +22,30 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler{
 
     @ExceptionHandler(PersonNotFoundException.class)
-    public ResponseEntity<Object> personNotFoundHandler(){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("errors Pessoa não encontrada");
+    public ResponseEntity<String> personNotFoundHandler(){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Person Not Found");
     }
 
-    public ResponseEntity<Object> serviceOrderNotFound(){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("errors Ordem de Serviço não encontrado");
+    @ExceptionHandler(ServiceOrderNotFoundException.class)
+    public ResponseEntity<String> serviceOrderNotFound(){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order Not Found");
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<Map<String, List<String>>> ValidatorException(MethodArgumentNotValidException ex) {
-        List<String> errors = ex.getBindingResult().getFieldErrors()
-                .stream().map(FieldError::getDefaultMessage).collect(Collectors.toList());
-        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<Problem> handleBindException(BindException ex) {
+        // Mapear os erros de validação para o formato Problem Details
+        Problem problem = Problem.builder()
+                .withStatus(Status.BAD_REQUEST)
+                .withTitle("Erro de validação")
+                .withDetail("Um ou mais campos estão inválidos. Corrija-os e tente novamente.")
+                .with("fieldErrors", getFieldErrors(ex))
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
     }
 
-    private Map<String, List<String>> getErrorsMap(List<String> errors) {
-        Map<String, List<String>> errorResponse = new HashMap<>();
-        errorResponse.put("errors", errors);
-        return errorResponse;
+    private List<FieldError> getFieldErrors(BindException ex) {
+        return ex.getBindingResult().getFieldErrors();
     }
 
 }

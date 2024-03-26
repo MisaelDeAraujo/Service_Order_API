@@ -1,14 +1,25 @@
 package com.misael.service.order.controllers;
 
-import com.misael.service.order.entities.dtos.AlterServiceOrderDto;
-import com.misael.service.order.entities.dtos.SearchPersonAndRegisterOrderDto;
-import com.misael.service.order.services.OrderService;
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.misael.service.order.entities.Order;
+import com.misael.service.order.entities.dtos.AlterServiceOrderDto;
+import com.misael.service.order.entities.dtos.SearchPersonAndRegisterOrderDto;
+import com.misael.service.order.services.OrderService;
+
+import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
@@ -16,21 +27,24 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     @Autowired
-    private final OrderService orderService;
+    private OrderService orderService;
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Object> registerNewOrder(@RequestBody @Valid SearchPersonAndRegisterOrderDto searchPersonAndRegisterOrderDto){
-            return ResponseEntity.accepted().body(orderService.registerNewOrder(searchPersonAndRegisterOrderDto));
+    @PostMapping
+    public ResponseEntity<Order> registerNewOrder(@RequestBody @Valid SearchPersonAndRegisterOrderDto searchPersonAndRegisterOrderDto){
+    	Order order = orderService.registerNewOrder(searchPersonAndRegisterOrderDto);   
+    	return ResponseEntity.status(HttpStatus.CREATED).body(order);
         }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<Object> listAllServiceOrders(){
-        return ResponseEntity.accepted().body(orderService.listAllServiceOrders());
+    @GetMapping
+    public ResponseEntity<List<Order>> listAllServiceOrders(){
+    	List<Order> orders = orderService.listAllServiceOrders();
+        return ResponseEntity.status(HttpStatus.OK).body(orders);
     }
 
-    @RequestMapping(value = "/{id}",method = RequestMethod.PUT)
-    public ResponseEntity<Object> alterExistingOrderById(@RequestBody @Valid AlterServiceOrderDto orderDto,
+    @PutMapping("/{id}")
+    public ResponseEntity<Order> alterExistingOrderById(@RequestBody @Valid AlterServiceOrderDto orderDto,
                                                         @PathVariable(value = "id") Integer id){
-        return ResponseEntity.accepted().body(orderService.alterExistingOrder(orderDto,id));
+    	Order order = orderService.alterExistingOrder(orderDto,id);
+        return ResponseEntity.status(HttpStatus.OK).body(order);
     }
 }

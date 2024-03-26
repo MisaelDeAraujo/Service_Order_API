@@ -1,22 +1,22 @@
 package com.misael.service.order.services;
 
-import com.misael.service.order.entities.Person;
-import com.misael.service.order.entities.dtos.LegalPersonDto;
-import com.misael.service.order.entities.dtos.PhysicalPersonDto;
-import com.misael.service.order.exceptions.PersonNotFoundException;
-import com.misael.service.order.repositories.PersonRepository;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.misael.service.order.entities.Person;
+import com.misael.service.order.entities.dtos.LegalPersonDto;
+import com.misael.service.order.entities.dtos.PhysicalPersonDto;
+import com.misael.service.order.exceptions.PersonNotFoundException;
+import com.misael.service.order.repositories.PersonRepository;
+
+import lombok.Builder;
+
 @Builder
-@AllArgsConstructor
 @Service
 public class PersonService {
 

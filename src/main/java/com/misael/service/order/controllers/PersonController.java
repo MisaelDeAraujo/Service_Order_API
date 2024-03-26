@@ -19,20 +19,21 @@ public class PersonController {
 
     private PersonService personService;
 
-    @RequestMapping(value = "/physicals",method = RequestMethod.POST)
+    @PostMapping("/physicals")
     public ResponseEntity<PhysicalPersonDto> registerNewPhysicalPerson(@RequestBody @Valid PhysicalPersonDto physicalPersonDto){
         personService.registerNewPhysicalPerson(physicalPersonDto);
-        return ResponseEntity.ok().body(physicalPersonDto);
+        return ResponseEntity.status(HttpStatus.OK).body(physicalPersonDto);
     }
 
-    @RequestMapping(value = "/legals",method = RequestMethod.POST)
+    @PostMapping("/legals")
     public ResponseEntity<LegalPersonDto> registerNewLegalPerson(@RequestBody @Valid LegalPersonDto legalPersonDto){
         personService.registerNewLegalPerson(legalPersonDto);
-        return ResponseEntity.ok().body(legalPersonDto);
+        return ResponseEntity.status(HttpStatus.OK).body(legalPersonDto);
     }
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity<List<Person>> listAllPersons(){
-        return ResponseEntity.status(HttpStatus.OK).body(personService.listAllPersons());
+    	List<Person> persons = personService.listAllPersons();
+        return ResponseEntity.status(HttpStatus.OK).body(persons);
     }
 
 

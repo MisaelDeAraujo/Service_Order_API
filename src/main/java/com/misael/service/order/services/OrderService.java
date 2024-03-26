@@ -1,5 +1,13 @@
 package com.misael.service.order.services;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.misael.service.order.entities.Order;
 import com.misael.service.order.entities.Person;
 import com.misael.service.order.entities.dtos.AlterServiceOrderDto;
@@ -7,15 +15,7 @@ import com.misael.service.order.entities.dtos.SearchPersonAndRegisterOrderDto;
 import com.misael.service.order.exceptions.PersonNotFoundException;
 import com.misael.service.order.exceptions.ServiceOrderNotFoundException;
 import com.misael.service.order.repositories.OrderRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Optional;
-
-@AllArgsConstructor
 @Service
 public class OrderService {
     @Autowired
@@ -24,7 +24,7 @@ public class OrderService {
     @Autowired
     private PersonService personService;
 
-    public Object registerNewOrder(SearchPersonAndRegisterOrderDto searchPersonAndRegisterOrderDto){
+    public Order registerNewOrder(SearchPersonAndRegisterOrderDto searchPersonAndRegisterOrderDto){
         Optional<Person> personName = personService.findByCompleteName(searchPersonAndRegisterOrderDto.searchPersonByName());
         if(personName.isPresent()) {
             Person person = personName.get();
@@ -39,7 +39,7 @@ public class OrderService {
         }
     }
 
-    public Object alterExistingOrder(AlterServiceOrderDto orderDto, Integer id){
+    public Order alterExistingOrder(AlterServiceOrderDto orderDto, Integer id){
         Optional<Order> findId= orderRepository.findById(id);
         if(findId.isPresent()){
             var order = findId.get();
@@ -52,7 +52,7 @@ public class OrderService {
         }
     }
 
-    public Object listAllServiceOrders(){
+    public List<Order> listAllServiceOrders(){
         return orderRepository.findAll();
     }
 

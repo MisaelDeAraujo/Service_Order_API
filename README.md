@@ -1,5 +1,3 @@
-## Em contrução, porém já funcional 🚧
- 
 ### Tecnologias:
 
 - Java 17

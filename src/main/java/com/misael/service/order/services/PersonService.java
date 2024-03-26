@@ -1,29 +1,29 @@
 package com.misael.service.order.services;
 
-import com.misael.service.order.entities.Person;
-import com.misael.service.order.entities.dtos.LegalPersonDto;
-import com.misael.service.order.entities.dtos.PhysicalPersonDto;
-import com.misael.service.order.exceptions.PersonNotFoundException;
-import com.misael.service.order.repositories.PersonRepository;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.misael.service.order.entities.Person;
+import com.misael.service.order.entities.dtos.LegalPersonDto;
+import com.misael.service.order.entities.dtos.PhysicalPersonDto;
+import com.misael.service.order.exceptions.PersonNotFoundException;
+import com.misael.service.order.repositories.PersonRepository;
+
+import lombok.Builder;
+
 @Builder
-@AllArgsConstructor
 @Service
 public class PersonService {
 
     @Autowired
     private PersonRepository personRepository;
 
-    public Object registerNewPhysicalPerson(PhysicalPersonDto physicalPersonDto){
+    public Person registerNewPhysicalPerson(PhysicalPersonDto physicalPersonDto){
         var person = Person.builder()
                 .completeName(physicalPersonDto.completeName())
                 .cpf(physicalPersonDto.cpf())
@@ -34,7 +34,7 @@ public class PersonService {
         return personRepository.save(person);
 
     }
-    public Object listAllPersons(){
+    public List<Person> listAllPersons(){
         return personRepository.findAll();
     }
 
@@ -46,7 +46,7 @@ public class PersonService {
     }
 
 
-    public Object registerNewLegalPerson(LegalPersonDto legalPersonDto) {
+    public Person registerNewLegalPerson(LegalPersonDto legalPersonDto) {
         var person = Person.builder()
                 .completeName(legalPersonDto.completeName())
                 .cnpj(legalPersonDto.cnpj())

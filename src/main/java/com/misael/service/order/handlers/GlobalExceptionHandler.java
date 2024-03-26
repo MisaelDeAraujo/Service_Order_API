@@ -1,42 +1,40 @@
 package com.misael.service.order.handlers;
 
-import com.misael.service.order.exceptions.PersonNotFoundException;
-import org.springframework.http.HttpHeaders;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.misael.service.order.exceptions.PersonNotFoundException;
+import com.misael.service.order.exceptions.ServiceOrderNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler{
 
     @ExceptionHandler(PersonNotFoundException.class)
-    public ResponseEntity<Object> personNotFoundHandler(){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("errors Pessoa não encontrada");
+    public ResponseEntity<String> personNotFoundHandler(){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Person não encontada");
     }
 
-    public ResponseEntity<Object> serviceOrderNotFound(){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("errors Ordem de Serviço não encontrado");
+    @ExceptionHandler(ServiceOrderNotFoundException.class)
+    public ResponseEntity<String> serviceOrderNotFound(){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order não encontrada");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<Map<String, List<String>>> ValidatorException(MethodArgumentNotValidException ex) {
-        List<String> errors = ex.getBindingResult().getFieldErrors()
-                .stream().map(FieldError::getDefaultMessage).collect(Collectors.toList());
-        return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    public ProblemDetail handlerValidation(MethodArgumentNotValidException ex) {
+    	List<String> fieldErrors = ex.getBindingResult().getFieldErrors().stream()
+    			.map(FieldError::getDefaultMessage).collect(Collectors.toList());
+    	String errorMessage = fieldErrors.toString();
+    	return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, errorMessage);
     }
-
-    private Map<String, List<String>> getErrorsMap(List<String> errors) {
-        Map<String, List<String>> errorResponse = new HashMap<>();
-        errorResponse.put("errors", errors);
-        return errorResponse;
-    }
+    
+    
 
 }

@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  postgres-serviceorder-api:
+  postgres:
     image: postgres:latest
     container_name: postgres-container-serviceorder
     environment:

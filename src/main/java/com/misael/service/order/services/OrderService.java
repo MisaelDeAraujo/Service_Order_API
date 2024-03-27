@@ -25,7 +25,8 @@ public class OrderService {
     private PersonService personService;
 
     public Order registerNewOrder(SearchPersonAndRegisterOrderDto searchPersonAndRegisterOrderDto){
-        Optional<Person> personName = personService.findByCompleteName(searchPersonAndRegisterOrderDto.searchPersonByName());
+        Optional<Person> personName = personService.findByCompleteName(
+        		searchPersonAndRegisterOrderDto.searchPersonByName().toUpperCase());
         if(personName.isPresent()) {
             Person person = personName.get();
             Order order = Order.builder().title(searchPersonAndRegisterOrderDto.title())

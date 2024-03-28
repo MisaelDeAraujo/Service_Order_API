@@ -1,6 +1,8 @@
 package com.misael.service.order.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.misael.service.order.entities.enums.PersonRegisteredType;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +33,9 @@ public class Person {
 
     @Column(length = 11, unique = true)
     private String cellphone;
+    
+    @Column
+    private PersonRegisteredType personType;
 
     @Column(length = 50, unique = true)
     private String email;

@@ -18,27 +18,35 @@ import com.misael.service.order.entities.dtos.AlterServiceOrderDto;
 import com.misael.service.order.entities.dtos.SearchPersonAndRegisterOrderDto;
 import com.misael.service.order.services.OrderService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/orders")
+@Tag(name = "service-order-api")
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
 
+    @Operation(summary = "Realiza registro de nova ordem de serviço", description = "Insira nome completo da pessoa (física ou jurídica)"
+    		+ "já cadastrada e coloque um titulo e descrição para a ordem de serviço.")
     @PostMapping
-    public ResponseEntity<Order> registerNewOrder(@RequestBody @Valid SearchPersonAndRegisterOrderDto searchPersonAndRegisterOrderDto){
-    	Order order = orderService.registerNewOrder(searchPersonAndRegisterOrderDto);   
-    	return ResponseEntity.status(HttpStatus.CREATED).body(order);
+    public ResponseEntity<SearchPersonAndRegisterOrderDto> registerNewOrder(@RequestBody @Valid SearchPersonAndRegisterOrderDto searchPersonAndRegisterOrderDto){
+    	orderService.registerNewOrder(searchPersonAndRegisterOrderDto);   
+    	return ResponseEntity.status(HttpStatus.CREATED).body(searchPersonAndRegisterOrderDto);
         }
 
+    @Operation(summary = "Realiza listagem de todas as ordem de serviço, seja de pessoa física ou jurídica")
     @GetMapping
     public ResponseEntity<List<Order>> listAllServiceOrders(){
     	List<Order> orders = orderService.listAllServiceOrders();
         return ResponseEntity.status(HttpStatus.OK).body(orders);
     }
 
+    @Operation(summary = "Realiza alteração da ordem de serviço", description = "Insira o ID da ordem de serviço"
+    		+ "e preencha os campos titulo e descrição para alteração") //MISAEL, as vezes a pessoa só quer alterar o titulo
     @PutMapping("/{id}")
     public ResponseEntity<Order> alterExistingOrderById(@RequestBody @Valid AlterServiceOrderDto orderDto,
                                                         @PathVariable(value = "id") Integer id){

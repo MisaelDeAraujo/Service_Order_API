@@ -5,12 +5,14 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.misael.service.order.entities.Order;
 import com.misael.service.order.entities.Person;
 import com.misael.service.order.entities.dtos.AlterServiceOrderDto;
+import com.misael.service.order.entities.dtos.PersonDto;
 import com.misael.service.order.entities.dtos.SearchPersonAndRegisterOrderDto;
 import com.misael.service.order.exceptions.PersonNotFoundException;
 import com.misael.service.order.exceptions.ServiceOrderNotFoundException;
@@ -25,7 +27,8 @@ public class OrderService {
     private PersonService personService;
 
     public Order registerNewOrder(SearchPersonAndRegisterOrderDto searchPersonAndRegisterOrderDto){
-        Optional<Person> personName = personService.findByCompleteName(searchPersonAndRegisterOrderDto.searchPersonByName());
+        Optional<Person> personName = personService.findByCompleteName(
+        		searchPersonAndRegisterOrderDto.searchPersonByName().toUpperCase());
         if(personName.isPresent()) {
             Person person = personName.get();
             Order order = Order.builder().title(searchPersonAndRegisterOrderDto.title())
@@ -43,8 +46,12 @@ public class OrderService {
         Optional<Order> findId= orderRepository.findById(id);
         if(findId.isPresent()){
             var order = findId.get();
-            order.setTitle(orderDto.title());
-            order.setDescription(orderDto.description());
+            if(orderDto.title() != null && !orderDto.title().isBlank() && orderDto.title().length() < 50) {
+                order.setTitle(orderDto.title());
+            }
+            if(orderDto.description() != null && !orderDto.description().isBlank()) {
+            	order.setDescription(orderDto.description());
+            }
             return orderRepository.save(order);
         }
         else{

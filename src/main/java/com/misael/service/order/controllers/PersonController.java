@@ -17,10 +17,12 @@ import com.misael.service.order.entities.dtos.PhysicalPersonDto;
 import com.misael.service.order.services.PersonService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/persons")
+@Tag(name = "service-order-api")
 public class PersonController {
 
 	@Autowired

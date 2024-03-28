@@ -19,10 +19,12 @@ import com.misael.service.order.entities.dtos.SearchPersonAndRegisterOrderDto;
 import com.misael.service.order.services.OrderService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/orders")
+@Tag(name = "service-order-api")
 public class OrderController {
 
     @Autowired

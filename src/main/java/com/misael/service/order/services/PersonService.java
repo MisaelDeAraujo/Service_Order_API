@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.misael.service.order.entities.Person;
-import com.misael.service.order.entities.dtos.LegalPersonDto;
 import com.misael.service.order.entities.dtos.PersonDto;
-import com.misael.service.order.entities.dtos.PhysicalPersonDto;
 import com.misael.service.order.entities.enums.PersonRegisteredType;
 import com.misael.service.order.exceptions.PersonNotFoundException;
 import com.misael.service.order.repositories.PersonRepository;
@@ -26,16 +24,34 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    public Person registerNewPhysicalPerson(PhysicalPersonDto physicalPersonDto){
-        var person = Person.builder()
-                .completeName(physicalPersonDto.completeName().toUpperCase())
-                .cpf(physicalPersonDto.cpf())
-                .cellphone(physicalPersonDto.cellphone())
-                .email(physicalPersonDto.email())
-                .personType(PersonRegisteredType.PHYSYCAL)
-                .personCreatedDate(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")))
-                .build();
-        return personRepository.save(person);
+    public PersonDto registerNewPerson(PersonDto personDto){
+    	
+    	if(personDto.document().length() == 14) {
+            var person = Person.builder()
+                    .completeName(personDto.completeName().toUpperCase())
+                    .cnpj(personDto.document())
+                    .cellphone(personDto.cellphone())
+                    .email(personDto.email())
+                    .personType(PersonRegisteredType.LEGAL)
+                    .personCreatedDate(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")))
+                    .build();
+            personRepository.save(person);
+            return personDto;
+    	}else if(personDto.document().length() == 11) {
+            var person = Person.builder()
+                    .completeName(personDto.completeName().toUpperCase())
+                    .cpf(personDto.document())
+                    .cellphone(personDto.cellphone())
+                    .email(personDto.email())
+                    .personType(PersonRegisteredType.PHYSYCAL)
+                    .personCreatedDate(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")))
+                    .build();
+            personRepository.save(person);
+            return personDto;
+    	}
+    	
+    	return personDto;
+
 
     }
     public List<PersonDto> listAllPersons(){
@@ -75,15 +91,4 @@ public class PersonService {
     }
 
 
-    public Person registerNewLegalPerson(LegalPersonDto legalPersonDto) {
-        var person = Person.builder()
-                .completeName(legalPersonDto.completeName().toUpperCase())
-                .cnpj(legalPersonDto.cnpj())
-                .cellphone(legalPersonDto.cellphone())
-                .email(legalPersonDto.email())
-                .personType(PersonRegisteredType.LEGAL)
-                .personCreatedDate(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")))
-                .build();
-        return personRepository.save(person);
-    }
 }

@@ -5,14 +5,12 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.misael.service.order.entities.Order;
 import com.misael.service.order.entities.Person;
 import com.misael.service.order.entities.dtos.AlterServiceOrderDto;
-import com.misael.service.order.entities.dtos.PersonDto;
 import com.misael.service.order.entities.dtos.SearchPersonAndRegisterOrderDto;
 import com.misael.service.order.exceptions.PersonNotFoundException;
 import com.misael.service.order.exceptions.ServiceOrderNotFoundException;

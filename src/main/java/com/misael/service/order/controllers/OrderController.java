@@ -46,7 +46,7 @@ public class OrderController {
     }
 
     @Operation(summary = "Realiza alteração da ordem de serviço", description = "Insira o ID da ordem de serviço"
-    		+ "e preencha os campos titulo e descrição para alteração") //MISAEL, as vezes a pessoa só quer alterar o titulo
+    		+ "e preencha os campos titulo e descrição para alteração") 
     @PutMapping("/{id}")
     public ResponseEntity<Order> alterExistingOrderById(@RequestBody @Valid AlterServiceOrderDto orderDto,
                                                         @PathVariable(value = "id") Integer id){
